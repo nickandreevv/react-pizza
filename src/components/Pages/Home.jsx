@@ -23,10 +23,11 @@ const Home = ({ value }) => {
 
   useEffect(() => {
     setIsLoading(true)
+
+    const category = categoryId > 0 ? `category=${categoryId}` : '' // фильтр по категориям
+    const search = value ? `&search=${value}` : '' // при изменении инпута оставляем те пиццы, которое подходят под тебования
     fetch(
-      `https://63f4babd3f99f5855db60353.mockapi.io/pizzas?${
-        categoryId > 0 ? `category=${categoryId}` : ''
-      }&sortBy=${sort.sortProperty}&order=desc`
+      `https://63f4babd3f99f5855db60353.mockapi.io/pizzas?${category}&sortBy=${sort.sortProperty}&order=desc${search}`
     ) // делаем запрос. При измененни переменных - делаем запрос с нужными данными. По сортировке
       .then((res) => res.json())
       .then((arr) => {
@@ -34,11 +35,15 @@ const Home = ({ value }) => {
         setIsLoading(false) // меняем загрузочное окно на загрузившийся массив
       })
     window.scrollTo(0, 0) // при загрузке страницы скролл будет идти с самого верха
-  }, [categoryId, sort]) // если какая-то переменная меняется - делает запрос
+  }, [categoryId, sort, value]) // если какая-то переменная меняется - делает запрос
 
-  // const filteredItems = items.filter((item) =>
-  //   item.title.toLowerCase().includes(setValue.toLowerCase())
-  // )
+  const skeletons = [...new Array(9)].map((_, index) => (
+    <Skeleton key={index} />
+  ))
+
+  const pizzas = items
+    // .filter((item) => item.title.toLowerCase().includes(value.toLowerCase()))
+    .map((obj) => <PizzaBlock key={obj.id} {...obj} />)
 
   return (
     <div className="container">
@@ -49,12 +54,8 @@ const Home = ({ value }) => {
       <h2 className="content__title">Все пиццы</h2>
       <div className="content__items">
         {isLoading
-          ? [...new Array(9)].map((_, index) => <Skeleton key={index} />) //  при загрузке создаем массив undef , и перебираем его
-          : items
-              .filter((item) =>
-                item.title.toLowerCase().includes(value.toLowerCase())
-              )
-              .map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
+          ? skeletons //  при загрузке создаем массив undef , и перебираем его
+          : pizzas}
       </div>
     </div>
   )
