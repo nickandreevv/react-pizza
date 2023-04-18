@@ -1,4 +1,8 @@
+import { useContext } from 'react'
+import { HomeContext } from './Pages/Home'
+
 const Categories = ({ value, onClickCategory }) => {
+  const { categoryId, setSortedCategory } = useContext(HomeContext)
   const categories = [
     'Все',
     'Мясные',
@@ -14,8 +18,8 @@ const Categories = ({ value, onClickCategory }) => {
         {categories.map((item, id) => (
           <li
             key={id}
-            className={value === id ? 'active' : ''}
-            onClick={() => onClickCategory(id)}
+            className={categoryId === id ? 'active' : ''}
+            onClick={() => setSortedCategory(id)}
           >
             {item}
           </li>

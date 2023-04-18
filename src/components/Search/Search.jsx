@@ -1,7 +1,11 @@
 import s from './search.module.scss'
 import icon from '../../assets/img/search.svg'
 import close from '../../assets/img/close.svg'
-const Search = ({ value, setValue }) => {
+import { useContext } from 'react'
+import { MainContext } from '../../App'
+const Search = () => {
+  const { value, setValue } = useContext(MainContext)
+
   return (
     <div className={s.root}>
       <img className={s.icon} src={icon} alt="search" />

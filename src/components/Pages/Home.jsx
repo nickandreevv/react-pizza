@@ -4,8 +4,15 @@ import Sort from '../Sort'
 import Skeleton from '../PizzaBlock/Skeleton'
 import PizzaBlock from '../PizzaBlock/PizzaBlock'
 import Pagination from '../Pagination/Pagination'
+import { useContext } from 'react'
+import { MainContext } from '../../App'
+import { createContext } from 'react'
 
-const Home = ({ value }) => {
+export const HomeContext = createContext('')
+
+const Home = () => {
+  const { value } = useContext(MainContext)
+
   const [items, setItems] = useState([]) // получаем пустой массив, в который будем добавлять данные с бэка
   const [categoryId, setCategoryId] = useState(0) // начальный индекс списка
   const [isLoading, setIsLoading] = useState(true) // загрузочное окно
@@ -44,23 +51,37 @@ const Home = ({ value }) => {
   ))
 
   const pizzas = items
-    // .filter((item) => item.title.toLowerCase().includes(value.toLowerCase()))
+    // .filter((item) => item.title.toLowerCase().includes(value.toLowerCase())) UPD: данные теперь получаем с бэка
     .map((obj) => <PizzaBlock key={obj.id} {...obj} />)
 
+  const onChangePage = (num) => {
+    setCurrentPage(num)
+  } // смена страницы
+
   return (
-    <div className="container">
-      <div className="content__top">
-        <Categories value={categoryId} onClickCategory={setSortedCategory} />
-        <Sort value={sort} onClickSort={getCortedTypes} />
+    <HomeContext.Provider
+      value={{
+        categoryId,
+        setSortedCategory,
+        sort,
+        getCortedTypes,
+        onChangePage,
+      }}
+    >
+      <div className="container">
+        <div className="content__top">
+          <Categories />
+          <Sort />
+        </div>
+        <h2 className="content__title">Все пиццы</h2>
+        <div className="content__items">
+          {isLoading
+            ? skeletons //  при загрузке создаем массив undef , и перебираем его
+            : pizzas}
+        </div>
+        <Pagination />
       </div>
-      <h2 className="content__title">Все пиццы</h2>
-      <div className="content__items">
-        {isLoading
-          ? skeletons //  при загрузке создаем массив undef , и перебираем его
-          : pizzas}
-      </div>
-      <Pagination onChangePage={(num) => setCurrentPage(num)} />
-    </div>
+    </HomeContext.Provider>
   )
 }
 

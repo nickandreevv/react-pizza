@@ -1,6 +1,9 @@
+import { useContext } from 'react'
 import { useState } from 'react'
+import { HomeContext } from './Pages/Home'
 
-const Sort = ({ value, onClickSort }) => {
+const Sort = () => {
+  const { sort, getCortedTypes } = useContext(HomeContext)
   const [isVisible, setIsVisible] = useState(false)
 
   const list = [
@@ -14,7 +17,7 @@ const Sort = ({ value, onClickSort }) => {
   } // отображение popup
 
   const setNewSortList = (index) => {
-    onClickSort(index) // поменять на active элемент с совпадающим индексом
+    getCortedTypes(index) // поменять на active элемент с совпадающим индексом
     setIsVisible(false) // после выбора скрыть popup
   }
 
@@ -35,7 +38,7 @@ const Sort = ({ value, onClickSort }) => {
           />
         </svg>
         <b>Сортировка по:</b>
-        <span onClick={popUpHandleClick}>{value.name}</span>
+        <span onClick={popUpHandleClick}>{sort.name}</span>
       </div>
       {isVisible && (
         <div className="sort__popup">
@@ -45,7 +48,7 @@ const Sort = ({ value, onClickSort }) => {
                 key={id}
                 onClick={() => setNewSortList(obj)}
                 className={
-                  value.sortProperty === obj.sortProperty ? 'active' : ''
+                  sort.sortProperty === obj.sortProperty ? 'active' : ''
                 }
               >
                 {obj.name}

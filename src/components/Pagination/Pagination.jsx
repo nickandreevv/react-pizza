@@ -1,7 +1,10 @@
+import { useContext } from 'react'
 import ReactPaginate from 'react-paginate'
+import { HomeContext } from '../Pages/Home'
 import s from './Pagination.module.scss'
 
-const Pagination = ({ onChangePage }) => {
+const Pagination = () => {
+  const { onChangePage } = useContext(HomeContext)
   return (
     <ReactPaginate
       className={s.root}
