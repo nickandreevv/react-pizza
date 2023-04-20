@@ -1,16 +1,22 @@
-import { useContext } from 'react'
 import { useState } from 'react'
-import { HomeContext } from './Pages/Home'
+import { useDispatch, useSelector } from 'react-redux'
+import { setSortType } from '../../redux/slices/filterSlice'
+
+const list = [
+  { name: 'популярности', sortProperty: 'rating' },
+  { name: 'цене', sortProperty: 'price' },
+  { name: 'алфавиту', sortProperty: 'title' },
+]
 
 const Sort = () => {
-  const { sort, getCortedTypes } = useContext(HomeContext)
   const [isVisible, setIsVisible] = useState(false)
 
-  const list = [
-    { name: 'популярности', sortProperty: 'rating' },
-    { name: 'цене', sortProperty: 'price' },
-    { name: 'алфавиту', sortProperty: 'title' },
-  ]
+  const sort = useSelector((state) => state.filter.sort)
+  const dispatch = useDispatch()
+
+  const getCortedTypes = (index) => {
+    dispatch(setSortType(index))
+  }
 
   const popUpHandleClick = () => {
     setIsVisible(!isVisible)

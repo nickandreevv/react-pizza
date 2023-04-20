@@ -1,4 +1,4 @@
-import Header from './components/Header'
+import Header from './components/Pages/Header'
 import Home from './components/Pages/Home'
 import NotFound from './components/NotFoundBlock/NotFound'
 import Cart from './components/Pages/Cart'
@@ -7,7 +7,7 @@ import { Route, Routes } from 'react-router'
 import { useState } from 'react'
 import { createContext } from 'react'
 
-export const MainContext = createContext(' ')
+export const MainContext = createContext('')
 
 function App() {
   const [value, setValue] = useState('')
