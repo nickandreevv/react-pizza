@@ -1,10 +1,14 @@
-import { useContext } from 'react'
 import ReactPaginate from 'react-paginate'
-import { HomeContext } from '../Pages/Home'
+import { useDispatch } from 'react-redux'
 import s from './Pagination.module.scss'
+import { setCurrentPage } from '../../redux/slices/currentSlice'
 
 const Pagination = () => {
-  const { onChangePage } = useContext(HomeContext)
+  const dispatch = useDispatch()
+
+  const onChangePage = (num) => {
+    dispatch(setCurrentPage(num))
+  }
   return (
     <ReactPaginate
       className={s.root}
