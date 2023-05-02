@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import qs from 'qs'
+import { useNavigate } from 'react-router-dom'
 import Categories from './Categories'
 import Sort from './Sort'
 import Skeleton from '../PizzaBlock/Skeleton'
@@ -12,10 +14,11 @@ import { useSelector } from 'react-redux'
 const Home = () => {
   const categoryId = useSelector((state) => state.filter.categoryId) // получение начальной категории при загрузке страницы. Изменение прописано в Categories
   const sort = useSelector((state) => state.filter.sort.sortProperty) // получение начального значения сортировки при загрузке страницы. Изменение прописано в Sort
-  const currentPage = useSelector((state) => state.current.currentPage)
-  const { value } = useContext(MainContext)
+  const currentPage = useSelector((state) => state.filter.currentPage)
+  const { value } = useContext(MainContext) // значение инпута из компонента Search
   const [items, setItems] = useState([]) // получаем пустой массив, в который будем добавлять данные с бэка
   const [isLoading, setIsLoading] = useState(true) // загрузочное окно
+  const navigate = useNavigate()
 
   useEffect(() => {
     setIsLoading(true)
@@ -33,6 +36,14 @@ const Home = () => {
       })
     window.scroll(0, 0) // при загрузке страницы скролл будет идти с самого верха.
   }, [categoryId, sort, value, currentPage]) // если какая-то переменная меняется - useEffect ререндерит
+
+  useEffect(() => {
+    const queryString = qs.stringify({
+      categoryId,
+      currentPage,
+    }) // из объекта делаем строчку.
+    navigate(`?${queryString}`) // с помощью useNavigate вшиваем ее в адресную строку
+  }, [categoryId, sort, value, currentPage])
 
   const skeletons = [...new Array(9)].map((_, index) => (
     <Skeleton key={index} />

@@ -15,20 +15,21 @@ const Search = () => {
   const onChangeInput = (e) => {
     setSearchValue(e.target.value)
     updChangeInput(e.target.value)
-  }
+  } // изменение локального стейта и стейта из App
 
   const updChangeInput = useCallback(
-    debounce((str) => {
-      setValue(str)
-    }, 500),
+    debounce((value) => {
+      setValue(value)
+    }, 250),
     []
-  )
+  ) // debounce для того, чтобы вводе одного символа запрос на бэк не шел каждый раз
+  // useCallback нужен для того, чтобы сохратять ссылку на функцию
 
   const onClickClear = () => {
     setValue('')
     setSearchValue('')
     inputRef.current.focus()
-  }
+  } // очищает инпут и добавляет фокус на него.
   return (
     <div className={s.root}>
       <img className={s.icon} src={icon} alt="search" />
