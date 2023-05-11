@@ -1,3 +1,5 @@
+import { useRef } from 'react'
+import { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { setSortType } from '../../redux/slices/filterSlice'
@@ -10,6 +12,7 @@ const list = [
 
 const Sort = () => {
   const [isVisible, setIsVisible] = useState(false)
+  const sortRef = useRef(false) // реф для класса sort
 
   const sort = useSelector((state) => state.filter.sort)
   const dispatch = useDispatch()
@@ -27,8 +30,22 @@ const Sort = () => {
     setIsVisible(false) // после выбора скрыть popup
   }
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.composedPath().includes(sortRef.current)) {
+        setIsVisible(false)
+      } // если event содержит наш реф - выполняем условие ниже. Event - клик
+    } // с помощью useRef мы определяем нужный нам элемент.
+    // при клике на боди мы закрываем popup. Боди нахдим с помощью addEventListener
+    document.body.addEventListener('click', handleClickOutside)
+
+    return () => {
+      document.body.removeEventListener('click', handleClickOutside)
+    } // если выходим с компонента - вызов функции , которая убирает обработчик события. Вызывается только в этом случае
+  }, [])
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           className={isVisible ? 'sort__label_svg' : ''}

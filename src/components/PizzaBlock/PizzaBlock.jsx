@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { addItem } from '../../redux/slices/cartSlice'
 
 const PizzaBlock = ({
   category,
@@ -10,9 +12,28 @@ const PizzaBlock = ({
   title,
   types,
 }) => {
+  const dispatch = useDispatch()
+  const { count } = useSelector((state) =>
+    state.cart.items.finc((obj) => obj.id === id)
+  ) // если объекты совпадают - вытаскиваем count
+
   const typesOfNames = ['тонкое', 'традиционное']
   const [activeType, setActiveType] = useState(0)
   const [activeSize, setActiveSize] = useState(0)
+
+  const onClickAdd = () => {
+    const item = {
+      id,
+      title,
+      price,
+      imageUrl,
+      type: typesOfNames[activeType],
+      size: activeSize,
+    }
+    dispatch(addItem(item))
+  } // создаем объект, который будет передаваться в корзину
+  // item - берем те элементы, которые будут нужны в корзине
+  // с помощью dispach мы при нажатии будем изменять стейт(в редакс) и добавлять в него нужные элементы
   const getActiveType = (index) => {
     setActiveType(index)
   } // при нажатии на кнопку выбрать нужный тип теста
@@ -50,7 +71,10 @@ const PizzaBlock = ({
         </div>
         <div className="pizza-block__bottom">
           <div className="pizza-block__price">от {price} ₽</div>
-          <div className="button button--outline button--add">
+          <button
+            onClick={onClickAdd}
+            className="button button--outline button--add"
+          >
             <svg
               width="12"
               height="12"
@@ -64,8 +88,8 @@ const PizzaBlock = ({
               />
             </svg>
             <span>Добавить</span>
-            <i>2</i>
-          </div>
+            <i>{count}</i>
+          </button>
         </div>
       </div>
     </div>
