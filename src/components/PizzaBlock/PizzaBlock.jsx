@@ -13,9 +13,11 @@ const PizzaBlock = ({
   types,
 }) => {
   const dispatch = useDispatch()
-  const { count } = useSelector((state) =>
-    state.cart.items.finc((obj) => obj.id === id)
+  const cartItem = useSelector((state) =>
+    state.cart.items.find((obj) => obj.id === id)
   ) // если объекты совпадают - вытаскиваем count
+
+  const addedCount = cartItem ? cartItem.count : 0 // проверка. Если объект пуст - выводим 0. Иначе будет ошибка
 
   const typesOfNames = ['тонкое', 'традиционное']
   const [activeType, setActiveType] = useState(0)
@@ -88,7 +90,7 @@ const PizzaBlock = ({
               />
             </svg>
             <span>Добавить</span>
-            <i>{count}</i>
+            {addedCount > 0 && <i>{addedCount}</i>}
           </button>
         </div>
       </div>
