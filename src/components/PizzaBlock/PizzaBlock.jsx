@@ -30,7 +30,7 @@ const PizzaBlock = ({
       price,
       imageUrl,
       type: typesOfNames[activeType],
-      size: activeSize,
+      size: sizes[activeSize],
     }
     dispatch(addItem(item))
   } // создаем объект, который будет передаваться в корзину
