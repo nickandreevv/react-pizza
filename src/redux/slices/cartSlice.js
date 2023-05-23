@@ -35,8 +35,12 @@ const cartSlice = createSlice({
       const findItem = state.items.find((obj) => obj.id === action.payload)
       if (findItem) {
         findItem.count--
-        state.totalPrice = state.items.price
+        state.totalPrice -= findItem.price
       }
+      if (!state.totalPrice) {
+        state.items = []
+      }
+      // уменьшение цены при удалении товара
     }, // удаляем елемент. Находим нужный элемент -> если нашли - при клике уменьшаем count(счетчик)
 
     removeItem(state, action) {

@@ -10,17 +10,17 @@ const CartItem = ({ id, title, type, size, price, count, imageUrl }) => {
         id,
       })
     )
-  }
+  } // добавляет товар в корзину
 
   const onClickMinus = () => {
     dispach(minusItem(id))
-  }
+  } // удаляет товар из корзины
 
   const onClickRemove = () => {
     if (window.confirm('Хотите удалить эту позицию?')) {
       dispach(removeItem(id))
     }
-  }
+  } // очищает корзину
 
   return (
     <div className="cart__item">
